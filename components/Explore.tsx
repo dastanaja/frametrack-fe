@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 
 import {motion} from 'framer-motion'
-import Moviecard from './Moviecard'
+import Moviecard, { MovieCardSkeleton } from './Moviecard'
 import axios from 'axios'
 
 function Explore() {
@@ -31,26 +31,35 @@ function Explore() {
         Explore Movie & TV Shows</motion.h1>
         
         {
-            movies.length && (
-            <div className='grid grid-cols-4 gap-4'>
-                {movies.map((movie, i) => (
-                <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeOut', delay: i * 0.1 }}
-                >
-                    <Moviecard 
-                    imageUrl={movie.primaryImage.url} 
-                    title={movie.primaryTitle}
-                    startYear={movie.startYear}
-                    plot={movie.plot}
-                    />
-                </motion.div>
-                ))}    
-            </div>
+        movies.length ? (
+          <div className='grid grid-cols-4 gap-4'>
+            {movies.map((movie, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: i * 0.1 }}
+              >
+                <Moviecard 
+                  id={movie.id}
+                  imageUrl={movie.primaryImage.url} 
+                  title={movie.primaryTitle}
+                  startYear={movie.startYear}
+                  plot={movie.plot}
+                />
+              </motion.div>
+            )) }    
+          </div>
+        ) : (
+              <div className='grid grid-cols-4 gap-4'>
+                {
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <MovieCardSkeleton key={i} />
+                  ))
+                }
+              </div>
             )
-        }
+      }
     </div>
   )
 }

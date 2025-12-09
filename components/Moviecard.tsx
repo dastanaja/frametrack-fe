@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 interface MovieCardProps {
@@ -5,12 +6,14 @@ interface MovieCardProps {
   title: string
   startYear: string
   plot: string
+  id : string
 }
 
 function MovieCard(props: MovieCardProps) {
-  const { imageUrl, title, startYear, plot } = props
+  const { id, imageUrl, title, startYear, plot } = props
 
   return (
+    <Link href={`/movie/${id}`}>
     <div 
       className='relative flex flex-col justify-end w-full aspect-3/4 overflow-hidden rounded-md group cursor-pointer'
     >
@@ -26,7 +29,14 @@ function MovieCard(props: MovieCardProps) {
         <p className='line-clamp-2'>{plot}</p>
       </div>
     </div>
+    </Link>
   )
 }
-
+export function MovieCardSkeleton() {
+  return (
+    <div 
+      className='w-full aspect-3/4 rounded-md bg-gray-800 animate-pulse'
+    ></div>
+  )
+}
 export default MovieCard
