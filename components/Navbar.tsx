@@ -9,7 +9,7 @@ function Navbar() {
         {/* Logo */}
         <div>
           <Link href="/">
-            <Image src="/logo.png" alt='Logo Frame Track' width={80} height={80} />
+            <Image src="/logoWeb.png" alt='Logo Frame Track' width={80} height={80} />
           </Link>
         </div>
 
