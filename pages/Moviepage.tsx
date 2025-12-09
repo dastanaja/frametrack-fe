@@ -45,6 +45,34 @@ function Moviepage() {
         <div className='relative flex flex-col w-2/3 z-10 pb-6'>
         <Rating rating={movie.rating.aggregateRating}/>
           <h1 className='text-5xl font-medium'>{movie.primaryTitle}</h1>
+          <div className='flex flex-col gap-1 mt-4'>
+            <p>
+
+              Directors:
+              {
+                movie.directors.map((director: any, i: number) => (
+                  <span key={i}>{' '}{director.displayName}{i !== movie.directors.length - 1 ? ',' : ''}</span>
+                ))
+              } 
+            </p>
+            <p>
+              Writers:
+              {
+                movie.writers.map((writer: any, i: number) => (
+                  <span key={i}>{' '}{writer.displayName}{i !== movie.writers.length - 1 ? ',' : ''}</span>
+                ))
+              } 
+            </p>
+            <p>
+              Stars:
+              {
+                movie.stars.map((star: any, i: number) => (
+                  <span key={i}>{' '}{star.displayName}{i !== movie.stars.length - 1 ? ',' : ''}</span>
+                ))
+              } 
+            </p>
+          </div>
+
           <p className='mt-4'>{movie.plot}</p>
             
         </div>
