@@ -8,6 +8,7 @@ import Image from 'next/image'
 import Rating from '@/components/Rating'
 import { motion } from 'framer-motion'
 import Button from '@/components/Button'
+import { toast } from 'react-toastify'
 
 function Moviepage() {
     const param = useParams()
@@ -50,6 +51,7 @@ function Moviepage() {
         let watchlist: any[] = existingWatchlist ? JSON.parse(existingWatchlist) : [];
         watchlist.push(movieId);
         window.localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        toast("Movie added to watchlist!")
         setIsInWatchlist(true);
 
         console.log('Data injected into Local Storage successfully.');
@@ -68,6 +70,7 @@ function Moviepage() {
         let watchlist: any[] = existingWatchlist ? JSON.parse(existingWatchlist) : [];
         watchlist = watchlist.filter(id => id !== movieId);
         window.localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        toast("Movie remove from watchlist!")
         setIsInWatchlist(false);
 
         console.log('Data injected into Local Storage successfully.');
@@ -89,13 +92,14 @@ function Moviepage() {
         const options = {
           year: "numeric",
           month: "long"
-        }
+        } as const
         const formattedDate = new Intl.DateTimeFormat('en-US', options).format(currentDate);
         const currentDiary = diary[formattedDate] ? diary[formattedDate] : [];
         currentDiary.push(movieId)
         diary[formattedDate] = currentDiary
         
         window.localStorage.setItem('diary', JSON.stringify(diary));
+        toast("Movie added to diary!")
 
         console.log('Movie injected into diary successfully.');
       } catch (error) {

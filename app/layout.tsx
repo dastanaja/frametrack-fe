@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { Bounce, ToastContainer } from "react-toastify";
 
 const poppins = Poppins({
   variable:"--font-poppins",
@@ -24,6 +25,20 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} zantialiased`}
       >
+        <ToastContainer 
+          position="bottom-right"
+          autoClose={1000}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          hideProgressBar
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Bounce}
+        />
+
         <Navbar></Navbar>
         {children}
       </body>
