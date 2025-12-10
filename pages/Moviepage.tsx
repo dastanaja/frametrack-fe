@@ -13,6 +13,7 @@ function Moviepage() {
     const param = useParams()
 
     const [movie, setMovie] = useState<any | null>(null)
+    const [isInWatchlist, setIsInWatchlist] = useState<boolean>(false)
   useEffect(() => {
     if (!param) return
     const fetchMovie = async () => {
@@ -26,6 +27,84 @@ function Moviepage() {
 
     fetchMovie()
   }, [param])
+  useEffect(() => {
+    if (!movie) return
+
+    if (typeof window !== 'undefined') {
+      try {
+        const existingWatchlist: string | null = window.localStorage.getItem('watchlist');
+        let watchlist: any[] = existingWatchlist ? JSON.parse(existingWatchlist) : [];
+        if (watchlist.includes(movie.id)) {
+          setIsInWatchlist(true);
+        }
+      } catch (error) {
+        
+      }
+    }
+  }, [movie])
+    function addMovieToWatchlist(movieId: string)
+    {
+    if (typeof window !== 'undefined') {
+      try {
+        const existingWatchlist: string | null = window.localStorage.getItem('watchlist');
+        let watchlist: any[] = existingWatchlist ? JSON.parse(existingWatchlist) : [];
+        watchlist.push(movieId);
+        window.localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        setIsInWatchlist(true);
+
+        console.log('Data injected into Local Storage successfully.');
+      } catch (error) {
+        console.error('Could not access Local Storage:', error);
+      }
+    } else {
+      console.warn('Attempted to access Local Storage during SSR.');
+    }
+  };
+  function removeMovieToWatchlist(movieId: string)
+    {
+    if (typeof window !== 'undefined') {
+      try {
+        const existingWatchlist: string | null = window.localStorage.getItem('watchlist');
+        let watchlist: any[] = existingWatchlist ? JSON.parse(existingWatchlist) : [];
+        watchlist = watchlist.filter(id => id !== movieId);
+        window.localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        setIsInWatchlist(false);
+
+        console.log('Data injected into Local Storage successfully.');
+      } catch (error) {
+        console.error('Could not access Local Storage:', error);
+      }
+    } else {
+      console.warn('Attempted to access Local Storage during SSR.');
+    }
+  };
+
+    function addMovieToDiary(movieId: string) {
+    if (typeof window !== 'undefined') {
+      try {
+        const existingDiary: string | null = window.localStorage.getItem('diary');
+        let diary: any = existingDiary ? JSON.parse(existingDiary) : {};
+        
+        const currentDate = new Date();
+        const options = {
+          year: "numeric",
+          month: "long"
+        }
+        const formattedDate = new Intl.DateTimeFormat('en-US', options).format(currentDate);
+        const currentDiary = diary[formattedDate] ? diary[formattedDate] : [];
+        currentDiary.push(movieId)
+        diary[formattedDate] = currentDiary
+        
+        window.localStorage.setItem('diary', JSON.stringify(diary));
+
+        console.log('Movie injected into diary successfully.');
+      } catch (error) {
+        console.error('Could not access Local Storage:', error);
+      }
+    } else {
+      console.warn('Attempted to access Local Storage during SSR.');
+    }
+  };
 
     if (!param || !movie) return (
     <div className='relative flex flex-col justify-end w-full h-[560px] rounded-md overflow-hidden'>
@@ -66,9 +145,11 @@ function Moviepage() {
         }
 
         <div className='relative flex flex-col w-2/3 z-10 pb-6'>
-        <motion.div initial={{opacity:0, translateY:20}}
+          <motion.div initial={{opacity:0, translateY:20}}
             animate={{opacity:1, translateY:0}}
-            transition={{duration:0.5, ease:'easeOut', delay:0.1}}><Rating rating={movie.rating.aggregateRating}/></motion.div>
+            transition={{duration:0.5, ease:'easeOut', delay:0.1}}>
+              <Rating rating={movie.rating.aggregateRating}/>
+          </motion.div>
           <motion.h1 
           initial={{opacity:0, translateY:20}}
             animate={{opacity:1, translateY:0}}
@@ -116,10 +197,23 @@ function Moviepage() {
             transition={{duration:0.5, ease:'easeOut', delay:0.6}} className='mt-4'>{movie.plot}</motion.p>
             
           <div className="flex gap-2">
-            <Button className ="bg-[#222931]" 
-            label ="Add To Diary" />
-            <Button className ="bg-[#222931]" 
-            label ="Add To Watchlist" />
+            <motion.div initial={{opacity:0, translateY:20}}
+            animate={{opacity:1, translateY:0}}
+            transition={{duration:0.5, ease:'easeOut', delay:0.7}}><Button
+             className ="bg-[#222931]" 
+            label="Add To Diary" onClick={()=> addMovieToDiary(movie.id)} /></motion.div>
+            <motion.div initial={{opacity:0, translateY:20}}
+            animate={{opacity:1, translateY:0}}
+            transition={{duration:0.5, ease:'easeOut', delay:0.8}}><Button
+             className ="bg-[#222931]" 
+            label ={`${isInWatchlist? 'Added To Watchlist':'Add To Watchlist'}`} onClick={()=> {
+              if (isInWatchlist) {
+                removeMovieToWatchlist(movie.id)
+              }
+              else {
+                addMovieToWatchlist(movie.id)
+              }
+            }}/></motion.div>
           </div>
         </div>
       </div>
