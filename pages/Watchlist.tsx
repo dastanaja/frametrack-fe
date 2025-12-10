@@ -19,10 +19,13 @@ function Watchlist() {
         const existingWatchlist: string | null = window.localStorage.getItem('watchlist');
         let titleIds = existingWatchlist ? JSON.parse(existingWatchlist) : [];
 
-        titleIds.map(async (titleId: string) => {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_IMDB_API}/titles/${titleId}`)
-          setWatchlist((prev) => [...prev, response.data])
-        })
+        const fetchPromises = titleIds.map((titleId: string) => {
+          return axios.get(`${process.env.NEXT_PUBLIC_IMDB_API}/titles/${titleId}`)
+        });
+
+        const responses = await Promise.all(fetchPromises);
+
+        const newWatchlistData = responses.map(res => res.data);
       } catch (error) {
         
       } finally {
