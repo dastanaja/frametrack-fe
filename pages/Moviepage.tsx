@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Rating from '@/components/Rating'
 import { motion } from 'framer-motion'
+import Button from '@/components/Button'
 
 function Moviepage() {
     const param = useParams()
@@ -26,7 +27,24 @@ function Moviepage() {
     fetchMovie()
   }, [param])
 
-    if  (!param || !movie) return <div>loading...</div>
+    if (!param || !movie) return (
+    <div className='relative flex flex-col justify-end w-full h-[560px] rounded-md overflow-hidden'>
+      <div className='absolute right-0 left-1/5 top-0 w-full h-full'>
+        <div className='absolute inset-x-0 top-0 z-10 w-1/4 h-full bg-linear-to-r from-background to-transparent'></div>
+        <div className='absolute inset-x-0 bottom-0 z-10 w-full h-1/4 bg-linear-to-t from-background to-transparent'></div>
+        <div className='w-4/5 h-full bg-gray-800 animate-pulse'></div>
+      </div>
+
+      <div className='relative flex flex-col gap-4 w-2/3 z-10 pb-6'>
+        <div className='w-[540px] h-12 bg-gray-800 rounded-md animate-pulse'></div>
+        <div className='w-[640px] h-5 bg-gray-800 rounded-md animate-pulse'></div>
+        <div className='w-[520px] h-5 bg-gray-800 rounded-md animate-pulse'></div>
+        <div className='w-[320px] h-5 bg-gray-800 rounded-md animate-pulse'></div>
+        <div className='w-[320px] h-5 bg-gray-800 rounded-md animate-pulse'></div>
+        <div className='w-[320px] h-5 bg-gray-800 rounded-md animate-pulse'></div>
+      </div>
+    </div>
+  )
   return (
     <div className='mx-auto max-w-[1200px]'>
       
@@ -97,6 +115,12 @@ function Moviepage() {
             animate={{opacity:1, translateY:0}}
             transition={{duration:0.5, ease:'easeOut', delay:0.6}} className='mt-4'>{movie.plot}</motion.p>
             
+          <div className="flex gap-2">
+            <Button className ="bg-[#222931]" 
+            label ="Add To Diary" />
+            <Button className ="bg-[#222931]" 
+            label ="Add To Watchlist" />
+          </div>
         </div>
       </div>
       
