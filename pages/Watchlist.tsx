@@ -33,7 +33,7 @@ function Watchlist() {
     fetchWatchlist()
   }, [])
   return (
-    <div className='max-w-[1200px] mx-auto'>
+    <div className='max-w-[1200px] mx-auto pb-40'>
       <motion.h1 
         className='mt-14 mb-18 font-medium text-left text-6xl' 
         initial={{ opacity: 0, y: 20 }}
